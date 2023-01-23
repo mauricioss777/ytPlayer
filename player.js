@@ -514,7 +514,8 @@ class YTplayer {
             class: 'yt-player-volume-bar yt-player-element-hidden',
             type: 'range',
             min: '0',
-            max: '100'
+            max: '100',
+            value: '75'
         }).on('change', this._setVolume);
         
         let plElemTime    = this._createElement('span',{'class':'yt-player-time'});
