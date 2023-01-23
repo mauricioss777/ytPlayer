@@ -280,12 +280,12 @@ class YTplayer {
 
     _hideVolumeBar() {
         this.plVolumeBar.hide();
-        this.isVolumeControlVisible = false;
+        this._isVolumeControlVisible = false;
     }
 
     _showVolumeBar() {
         this.plVolumeBar.show();
-        this.isVolumeControlVisible = true;
+        this._isVolumeControlVisible = true;
     }
 
     _volumeControl() { 
