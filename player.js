@@ -262,7 +262,7 @@ class YTplayer {
      * @description esta função dá play no vídeo.
      */
     play() { 
-        if(globalThis.ytPlayer.isFinishedVideo()){// HACK #1
+        if(globalThis.ytPlayer.isFinishedVideo() || !globalThis.ytPlayer.flagYTReady){// HACK #1
             return;
         }
         globalThis.ytPlayer.youtube.playVideo(); 
@@ -384,11 +384,14 @@ class YTplayer {
      * @returns boolean
      */
     isFinishedVideo(){
-        let currentSeconds = globalThis.ytPlayer.youtube.getCurrentTime();
-        let videoLenght = parseInt(globalThis.ytPlayer.videoLenght);
-        if(currentSeconds >= videoLenght -2){
-            return true;
+        if(globalThis.ytPlayer.flagYTReady){
+            let currentSeconds = globalThis.ytPlayer.youtube.getCurrentTime();
+            let videoLenght = parseInt(globalThis.ytPlayer.videoLenght);
+            if(currentSeconds >= videoLenght -2){
+                return true;
+            }
         }
+
         return false;
     }
     
@@ -637,8 +640,6 @@ class YTplayer {
 
             }
         });
-        
-        this._setVolume(50);
     }
 
     /**
@@ -648,6 +649,7 @@ class YTplayer {
         console.log("youtubeOnPlayerReady");
 
         globalThis.ytPlayer.threadPlayerControler();
+        globalThis.ytPlayer.flagYTReady = true;
         
     }
 
