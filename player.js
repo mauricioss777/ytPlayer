@@ -209,6 +209,7 @@ class YTplayer {
         let plElemLightModal = null; // quando aperta na luz para apagar o que está ao redor, esse elemento fica do tamanho da tela e escurece ao redor do vídeo.
         let plBtnLight = null;// botão de desligar a luz
         let plBtnLightOn = null;//botão de ligar a luz
+        let flagYTReady = false;//variável que controla se o player do youtube está pronto
 
         this.url = init.url;
         this.title = init.title;
@@ -243,6 +244,10 @@ class YTplayer {
             return false;
         }
 
+        if(typeof globalThis.ytPlayer.youtube.getPlayerState !== 'function'){
+            return false;
+        }
+
         if(globalThis.ytPlayer.youtube.getPlayerState() == 1){
             globalThis.ytPlayer.plElemControler.fadeOut();
             globalThis.ytPlayer.plElemTitle.fadeOut();
@@ -257,7 +262,7 @@ class YTplayer {
      * @description esta função dá play no vídeo.
      */
     play() { 
-        if(globalThis.ytPlayer.isFinishedVideo()){// HACK #1
+        if(globalThis.ytPlayer.isFinishedVideo() || !globalThis.ytPlayer.flagYTReady){// HACK #1
             return;
         }
         globalThis.ytPlayer.youtube.playVideo(); 
@@ -379,11 +384,14 @@ class YTplayer {
      * @returns boolean
      */
     isFinishedVideo(){
-        let currentSeconds = globalThis.ytPlayer.youtube.getCurrentTime();
-        let videoLenght = parseInt(globalThis.ytPlayer.videoLenght);
-        if(currentSeconds >= videoLenght -2){
-            return true;
+        if(globalThis.ytPlayer.flagYTReady){
+            let currentSeconds = globalThis.ytPlayer.youtube.getCurrentTime();
+            let videoLenght = parseInt(globalThis.ytPlayer.videoLenght);
+            if(currentSeconds >= videoLenght -2){
+                return true;
+            }
         }
+
         return false;
     }
     
@@ -632,8 +640,6 @@ class YTplayer {
 
             }
         });
-        
-        this._setVolume(50);
     }
 
     /**
@@ -643,6 +649,7 @@ class YTplayer {
         console.log("youtubeOnPlayerReady");
 
         globalThis.ytPlayer.threadPlayerControler();
+        globalThis.ytPlayer.flagYTReady = true;
         
     }
 
