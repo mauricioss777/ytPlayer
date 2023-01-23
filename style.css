@@ -1,0 +1,14 @@
+.conteiner{
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    top: 100px;
+}
+conteiner-2{
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    top: 400px;
+}

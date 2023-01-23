@@ -1,0 +1,202 @@
+/*
+ * Modifique as configurações para adaptar o player
+ * às suas necessidades
+ */
+:root {
+
+    /* configuração da barra de título*/
+    --title-color: #FFF;
+    --title-background: rgba(0, 0, 0, 1);
+    --title-height: 55px;
+    --title-width: auto;
+    --title-align: left;
+    --title-pading: 0px 0px 0px 10px;
+    --title-font-family: Arial, Helvetica, sans-serif; 
+    --title-font-size: 12pt;
+    --title-font-weight: bold;
+
+    /* configuração da do player */
+    --controler-background: var(--title-background);
+    --controler-width: 100%;
+    --controler-height: 40px;
+    --controler-color: #FFF;
+    --controler-pading: 0px;
+    --controler-font-family: var(--title-font-family);
+    --controler-font-weight: normal;
+    --controler-icons-size: 24px;
+    --progressbar: #00FFFF;
+    --progressbar-background: #666;
+
+    /* 
+    * configura o logotipo
+    * o ideal é que o logotipo tenha um fundo transparente
+    */
+    --logo-height: 50px;
+    --logo-opacity: 0.5;
+  /*
+  * NÃO MODIFICAR DAQUI PARA BAIXO
+  */
+
+  --progressbar-percentil: 0%;
+
+}
+#yt-player{
+    position: absolute;
+    content: "";
+    margin: 0 auto;
+    border: 0px;
+    padding: 0px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: aquamarine;
+    z-index: 9900;
+}
+
+#yt-player .yt-player-modal{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    content: "";
+    margin: 0 auto;
+    border: 0px;
+    padding: 0px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+
+}
+#yt-player .yt-player-modal .yt-player-title{
+    display: flex;
+    background-color: var(--title-background);
+    width: var(--title-width);
+    height: var(--title-height);
+    color: var(--title-color);
+    justify-content: var(--title-align);
+    padding: var(--title-pading);
+    align-items: center;
+    font-family: var(--title-font-family);
+    font-size: var(--title-font-size);
+    font-weight: var(--title-font-weight);
+}
+#yt-player .yt-player-modal .yt-player-controler{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: var(--controler-width);
+    height: var(--controler-height);
+    background-color: var(--controler-background);
+    color: var(--controler-color);
+    padding: var(--controler-pading);
+    font-family: var(--controler-font-family);
+    font-weight: var(--controler-font-weight);
+    font-size: var(--controler-icons-size);
+}
+
+/*controla a barra de progresso do vídeo*/
+#yt-player .yt-player-modal .yt-player-progressbar{
+    position: absolute;
+    content: " ";
+    width: 100%;
+    height: 5px;
+    bottom: var(--controler-height);
+    background-color: var(--progressbar-background);
+}
+#yt-player .yt-player-modal .yt-player-progressbar:hover{
+    height: 10px;
+    cursor: pointer;
+    z-index: 1100;
+}
+
+#yt-player .yt-player-modal .yt-player-progressbar:before{
+    position: absolute;
+    content: " ";
+    width: var(--progressbar-percentil);
+    height: 100%;
+    background-color: var(--progressbar);
+    transition: width 0.1s;
+    z-index: 1100;
+}
+
+#yt-player .yt-player-modal a.yt-player-btn{
+    padding: 3px;    
+    color: var(--controler-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#yt-player .yt-player-modal .yt-player-element-hidden{
+    display: none;
+}
+
+
+#yt-player .yt-player-modal .yt-player-controler .yt-player-play,
+#yt-player .yt-player-modal .yt-player-controler .yt-player-pause,
+#yt-player .yt-player-modal .yt-player-controler .yt-player-time{
+    margin-left: 5px;
+}
+#yt-player .yt-player-modal .yt-player-controler .yt-player-volume{}
+#yt-player .yt-player-modal .yt-player-controler .yt-player-time{
+    display: inline-block;
+    font-size: 12px;
+    vertical-align: middle;
+}
+#yt-player .yt-player-modal .yt-player-controler .yt-player-time .yt-player-currenttime::after{
+    content: " / ";
+}
+    
+#yt-player .yt-player-modal .yt-player-controler .yt-player-back{}
+#yt-player .yt-player-modal .yt-player-controler .yt-player-next{}
+#yt-player .yt-player-modal .yt-player-controler .yt-player-caption{}
+
+#yt-player .yt-player-modal .yt-player-controler .yt-player-fullscreen,
+#yt-player .yt-player-modal .yt-player-controler .yt-player-fullscreen-exit{
+    margin-right: 5px;
+}
+#yt-player .yt-player-modal .yt-player-controler .yt-player-controlers-top-right{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+}
+#yt-player .yt-player-modal .yt-player-controler .yt-player-light{}
+
+#yt-player .yt-player-modal-light-off{
+    display: block;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    z-index: 700;
+    opacity: 0.0;
+    background-color: rgba(0, 0, 0, 0.9);
+    transition: all 1s;
+}
+
+#yt-player .yt-player-modal .yt-player-logo{
+    position: absolute;
+    bottom: var(--controler-height);
+    right: 10px;
+    z-index: 999;
+
+}
+#yt-player .yt-player-modal .yt-player-logo img{
+    height: var(--logo-height);
+    opacity: var(--logo-opacity);
+}
+
+#yt-player .yt-player-effect{
+    transition: opacity 1s, width 0.2s, height 0.2s;
+
+}
+
+
+
+
+

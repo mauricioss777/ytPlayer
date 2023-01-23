@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+    
+
+    <title>player</title>
+</head>
+<body>
+
+    <div class="conteiner">
+        <section id="yt-player"></section>
+    </div>
+
+    <a href="#" class="hr">aaaa</a>
+
+    <link rel="stylesheet" href="ytplayer.css">
+    <script src="player.js" ></script>
+    <script>
+
+        let _url = "https://www.youtube.com/watch?v=Ug3BhSrk-_8";
+        let _title = '<i class="bi bi-arrow-return-right"></i>&nbsp;Vídeo do Mss';
+        let _logo  ="https://images.vexels.com/media/users/3/139567/isolated/lists/582aca4000ab46231333a1df893c947e-logotipo-da-apple.png";
+
+
+        var jYTplayer = new YTplayer({
+            url: _url,
+            title: _title,
+            logo: _logo,
+            sectionid: 'yt-player'
+        });
+
+
+
+
+    </script>
+</body>
+</html>
+
+<!--
+    LEMBRAR:
+    - Possibilita configurar intro
+    - Possibilitar configurar assinatura no final do vídeo
+    - Possibilitar a inserção de um link para um próximo vídeo ou página   nextUrl: false
+    - implementar função de múltiplos players na mesma página
+-->
