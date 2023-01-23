@@ -224,6 +224,7 @@ class YTplayer {
         
         this.url = "https://www.youtub.com/embed/" + this.videoid + "?controls=0";
         this.playerElement = document.getElementById(this.config.sectionid);
+        this._isVolumeControlVisible = false;
 
         this._playerRender();
 
@@ -276,12 +277,26 @@ class YTplayer {
         globalThis.ytPlayer.plElemPause.hide();
     }
     nextVideo() { console.log('nextVideo'); }
-    volumeControl() { console.log('volumeControl'); }
-    caption() { console.log('caption'); }
 
-    /**
-     * @description esta função coloca o vídeo em fullscreen
-     */
+    _hideVolumeBar() {
+        this.plVolumeBar.hide();
+        this.isVolumeControlVisible = false;
+    }
+
+    _showVolumeBar() {
+        this.plVolumeBar.show();
+        this.isVolumeControlVisible = true;
+    }
+
+    _volumeControl() { 
+        if (this._isVolumeControlVisible) this._hideVolumeBar();
+        else this._showVolumeBar();
+    }
+
+    _setVolume(event) {
+        globalThis.ytPlayer.youtube.setVolume(event.target.value);
+    }
+
     fullscreenOn() {
         let aux = document.getElementById(globalThis.ytPlayer.config.sectionid);
         console.log(globalThis.ytPlayer.config.sectionid);
@@ -486,7 +501,13 @@ class YTplayer {
         this.plElemPlay    = this._createElement('a', {'href': '#', 'class': 'yt-player-play yt-player-btn'}).setHtml(this.icons.play).on('click',this.play);
         this.plElemPause   = this._createElement('a', {'href': '#', 'class': 'yt-player-pause yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.pause).on('click',this.pause);
         this.plElemNextVideo    = this._createElement('a', {'href': '#', 'class': 'yt-player-next yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.next).on('click',this.nextVideo);
-        this.plElemVolume  = this._createElement('a', {'href': '#', 'class': 'yt-player-volume yt-player-btn'}).setHtml(this.icons.volumeFull).on('click',this.volumeControl);
+        this.plElemVolume  = this._createElement('a', {'href': '#', 'class': 'yt-player-volume yt-player-btn'}).setHtml(this.icons.volumeFull).on('click',this._volumeControl.bind(this));
+        this.plVolumeBar = this._createElement('input', {
+            class: 'yt-player-volume-bar yt-player-element-hidden',
+            type: 'range',
+            min: '0',
+            max: '100'
+        }).on('change', this._setVolume);
         
         let plElemTime    = this._createElement('span',{'class':'yt-player-time'});
         this.plElemTimeCurrentTime    = this._createElement('span',{'class':'yt-player-currenttime'}).setText(this.currentTime);
@@ -500,6 +521,7 @@ class YTplayer {
                         .appendChild(this.plElemPause)
                         .appendChild(this.plElemNextVideo)
                         .appendChild(this.plElemVolume)
+                        .appendChild(this.plVolumeBar)
                         .appendChild(plElemTime);
        
 
@@ -611,6 +633,7 @@ class YTplayer {
             }
         });
         
+        this._setVolume(50);
     }
 
     /**
