@@ -15,7 +15,6 @@ console.log(`
     - implementar thumbnail
     - implementar multiplos players
     - implementar a função de retomar o vídeo de onde parou (youtube.playVideoAt(index:Number):Void)
-    - implementar a opção de payse e playe a partir do click no modal
     - implementar a velocidade do player (youtube.getPlaybackRate():Number) //0.25, 0.5, 1, 1.5 e 2
     - BUG: o logotipo fica encima do progressbar e não é possível clicar nele
     - adicionar opção de trocar ícones
