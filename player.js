@@ -19,7 +19,6 @@ console.log(`
     - implementar a velocidade do player (youtube.getPlaybackRate():Number) //0.25, 0.5, 1, 1.5 e 2
     - BUG: corrigir o bug do fullscreen (quando dá esc para sair não troca o botão)
     - BUG: o logotipo fica encima do progressbar e não é possível clicar nele
-    - tratar o caso de não receber um logotipo
     - pausar o player antes do final para que não apareça as sugestões de vídeo
     - adicionar opção de trocar ícones
     - tratar o tamanho do título para que não extrapole a linha
@@ -334,28 +333,30 @@ class YTplayer {
 
         console.log('total: '+w+" click: "+_w+" percentil: "+p+" newStart: "+newStartSecond);
         
-        
         globalThis.ytPlayer.youtube.seekTo(newStartSecond);
-
 
 
     }
     videoLength() { console.log('videoLength'); }
+
+    /**
+     * Ação disparada quando a lâmpada é ligada
+     */
     lightOn() { 
         globalThis.ytPlayer.plElemLightModal.element.style.visibility = 'hidden';
         globalThis.ytPlayer.plElemLightModal.element.style.opacity = '0.0';
         globalThis.ytPlayer.plBtnLightOn.element.style.display = 'none';
-        globalThis.ytPlayer.plBtnLight.element.style.display = 'block';
+        globalThis.ytPlayer.plBtnLight.element.style.display = 'initial';
     }
 
-
+    /**
+     * Ação disparada quando a lâmpada desligada
+     */
     lightOff() { 
         globalThis.ytPlayer.plElemLightModal.element.style.visibility = 'visible';
         globalThis.ytPlayer.plElemLightModal.element.style.opacity = '1';
-        globalThis.ytPlayer.plBtnLightOn.element.style.display = 'block';
+        globalThis.ytPlayer.plBtnLightOn.element.style.display = 'initial';
         globalThis.ytPlayer.plBtnLight.element.style.display = 'none';
-
-
      }
 
    /**
@@ -462,9 +463,12 @@ class YTplayer {
 
 
         this.plLogoSpan      = this._createElement('span',{'class':'yt-player-logo'});
-        this.plLogoImg       = this._createElement('img',{'src':this.logo,'alt':'logo'});
-                        
-        this.plLogoSpan.appendChild(this.plLogoImg);
+
+        if(typeof this.logo !== "undefined"){
+            this.plLogoImg       = this._createElement('img',{'src':this.logo,'alt':'logo'});
+            this.plLogoSpan.appendChild(this.plLogoImg);
+        }
+
 
 
         this.plElemControler.appendChild(plElemControlersLeft);
