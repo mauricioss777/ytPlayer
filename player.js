@@ -224,6 +224,15 @@ class YTplayer {
         this.playerElement = document.getElementById(this.config.sectionid);
 
         this._playerRender();
+
+        //BUGFIX - quando o usuário remove a tela do fullscreen usando ESC, os botoes ficam trocados.
+        document.addEventListener('fullscreenchange', function(){
+            if (document.fullscreenElement) {
+                globalThis.ytPlayer.fullscreenOn();
+            } else {
+                globalThis.ytPlayer.fullscreenOff();
+            }
+        });
     }
 
     controlersFadeOut(){
@@ -267,11 +276,11 @@ class YTplayer {
     fullscreenOn() {
         let aux = document.getElementById(globalThis.ytPlayer.config.sectionid);
         console.log(globalThis.ytPlayer.config.sectionid);
-        if (aux.requestFullscreen) {
+        if (aux.requestFullscreen && !document.fullscreenElement) {
             aux.requestFullscreen();
-        } else if (aux.webkitRequestFullscreen) { /* Safari */
+        } else if (aux.webkitRequestFullscreen && !document.fullscreenElement) { /* Safari */
             aux.webkitRequestFullscreen();
-        } else if (aux.msRequestFullscreen) { /* IE11 */
+        } else if (aux.msRequestFullscreen && !document.fullscreenElement) { /* IE11 */
             aux.msRequestFullscreen();
         }
         globalThis.ytPlayer.plElemFullscreenOff.show();
@@ -283,11 +292,11 @@ class YTplayer {
       * 
       */
     fullscreenOff() {
-        if (document.exitFullscreen) {
+        if (document.exitFullscreen && document.fullscreenElement) {
             document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) { /* Safari */
+        } else if (document.webkitExitFullscreen  && document.fullscreenElement) { /* Safari */
             document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { /* IE11 */
+        } else if (document.msExitFullscreen  && document.fullscreenElement) { /* IE11 */
             document.msExitFullscreen();
         }
         globalThis.ytPlayer.plElemFullscreenOn.show();
@@ -295,10 +304,14 @@ class YTplayer {
     }
 
     /**
-     * Thread que atualiza o tempo decorrido do vídeo a cada meio segundo
-     * Esta Thread também atualiza o percentual decorrido do vídeo
+     * Thread que controla alguns estados do player.
+     * - atualiza o tempo decorrido do vídeo a cada meio segundo (currentTime)
+     * - captura o tamanho do vídeo e adiciona ao player
+     * - atualiza o percentual do vídeo decorrido no progressbar
      */
-    currentTimeThreadStart() {
+    threadPlayerControler() {
+
+        //carrega as informações do vídeo depois que o youtube der o OK
         let videoLenght = globalThis.ytPlayer.youtube.getDuration();
         let duration = YTplayer._formatYTDateTime(videoLenght);
 
@@ -306,19 +319,23 @@ class YTplayer {
         globalThis.ytPlayer.plElemTimeVideoLenght.setText(duration);
 
         setInterval(function(){
+
+            //controla o tempo decorrido do video no player
             let currentSeconds = globalThis.ytPlayer.youtube.getCurrentTime();
             let current = YTplayer._formatYTDateTime(currentSeconds);
             globalThis.ytPlayer.currentTime = currentSeconds;
             globalThis.ytPlayer.plElemTimeCurrentTime.setText(current);
 
+            //controla o percentual de conclusão do vídeo no progressbar
             let videoLenght = parseInt(globalThis.ytPlayer.videoLenght);
             let percentil = (currentSeconds*100)/videoLenght;
-
             globalThis.ytPlayer.plElementProgressBar.element.style.setProperty('--progressbar-percentil', percentil+'%');
-        }, 100);//a cada meio segundo, atualiza as informações do vídeo
+
+        }, 100);//a cada meio segundo, atualiza as informações do player
        
     }
 
+    
     /**
      * Quando alguém clica na barra de progresso, este método é disparado.
      */
@@ -566,7 +583,7 @@ class YTplayer {
     youtubeOnPlayerReady(event) {
         console.log("youtubeOnPlayerReady");
 
-        globalThis.ytPlayer.currentTimeThreadStart();
+        globalThis.ytPlayer.threadPlayerControler();
         
     }
 
