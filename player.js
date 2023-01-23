@@ -17,7 +17,6 @@ console.log(`
     - implementar a função de retomar o vídeo de onde parou (youtube.playVideoAt(index:Number):Void)
     - implementar a opção de payse e playe a partir do click no modal
     - implementar a velocidade do player (youtube.getPlaybackRate():Number) //0.25, 0.5, 1, 1.5 e 2
-    - BUG: corrigir o bug do fullscreen (quando dá esc para sair não troca o botão)
     - BUG: o logotipo fica encima do progressbar e não é possível clicar nele
     - pausar o player antes do final para que não apareça as sugestões de vídeo
     - adicionar opção de trocar ícones
@@ -225,7 +224,7 @@ class YTplayer {
 
         this._playerRender();
 
-        //BUGFIX - quando o usuário remove a tela do fullscreen usando ESC, os botoes ficam trocados.
+        //BUGFIX - quando o usuário remove a tela do fullscreen usando ESC, os botoes ficavam trocados.
         document.addEventListener('fullscreenchange', function(){
             if (document.fullscreenElement) {
                 globalThis.ytPlayer.fullscreenOn();
