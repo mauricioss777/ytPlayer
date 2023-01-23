@@ -144,7 +144,27 @@
 
 
 .yt-player-volume-bar {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: white;
     width: 40%;
+    height: 5px;
+    border-radius: 5px;
+    margin-bottom: 5.5px;
+}
+
+.yt-player-volume-bar::-webkit-slider-thumb,
+.yt-player-volume-bar::-moz-range-thumb {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    background-color: white;
+    box-shadow: none;
+}
+
+.yt-player-volume-bar::-webkit-slider-thumb:hover ,
+.yt-player-volume-bar::-moz-range-thumb:hover {
+    cursor: ew-resize;
 }
 
 #yt-player .yt-player-modal .yt-player-controler .yt-player-time{
