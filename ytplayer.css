@@ -141,6 +141,12 @@
     margin-left: 5px;
 }
 #yt-player .yt-player-modal .yt-player-controler .yt-player-volume{}
+
+
+.yt-player-volume-bar {
+    width: 40%;
+}
+
 #yt-player .yt-player-modal .yt-player-controler .yt-player-time{
     display: inline-block;
     font-size: 12px;
