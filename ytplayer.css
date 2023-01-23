@@ -38,6 +38,7 @@
   */
 
   --progressbar-percentil: 0%;
+  --clicable-modal: calc(100% - calc(var(--title-height) + var(--controler-height) + 10px));
 
 }
 #yt-player{
@@ -71,6 +72,17 @@
     z-index: 9999;
 
 }
+
+#yt-player .yt-player-modal-clicable {
+    position: absolute;
+    content: " ";
+    background-color: transparent;
+    width: 100%;
+    height: var(--clicable-modal);
+    top: var(--title-height);
+    background-color: transparent;
+}
+
 #yt-player .yt-player-modal .yt-player-title{
     display: flex;
     background-color: var(--title-background);

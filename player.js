@@ -18,7 +18,6 @@ console.log(`
     - implementar a opção de payse e playe a partir do click no modal
     - implementar a velocidade do player (youtube.getPlaybackRate():Number) //0.25, 0.5, 1, 1.5 e 2
     - BUG: o logotipo fica encima do progressbar e não é possível clicar nele
-    - pausar o player antes do final para que não apareça as sugestões de vídeo
     - adicionar opção de trocar ícones
     - tratar o tamanho do título para que não extrapole a linha
     - testar responsividade
@@ -415,6 +414,26 @@ class YTplayer {
     }
     videoLength() { console.log('videoLength'); }
 
+
+    /**
+     * Controla o play e pause pelo modal
+     */
+    modalClick(){
+        console.log("modaClick");
+        if(typeof globalThis.ytPlayer.youtube.getPlayerState !== 'function'){
+            return false;
+        }
+
+        if(globalThis.ytPlayer.youtube.getPlayerState() == 1){
+            console.log("pause");
+            globalThis.ytPlayer.pause();
+        }else{
+            console.log("play");
+            globalThis.ytPlayer.play();
+        }
+    }
+
+
     /**
      * Ação disparada quando a lâmpada é ligada
      */
@@ -481,10 +500,12 @@ class YTplayer {
      */
     _playerRender() {
         this._iframeRender();
-        let plModal = this._createElement('div',{'class': 'yt-player-modal'}).on('mouseover',this.controlersFadeIn).on('mouseout',this.controlersFadeOut);
+        let plModal = this._createElement('div',{'class': 'yt-player-modal'});//.on('mouseover',this.controlersFadeIn).on('mouseout',this.controlersFadeOut).on('click',this.modalClick);
         this.plElemTitle = this._createElement('div',{'class': 'yt-player-title'}).setHtml(this.title);
-        
         plModal.appendChild(this.plElemTitle);
+
+        let plModalCLicable = this._createElement('div',{'class': 'yt-player-modal-clicable'}).on('mouseover',this.controlersFadeIn).on('mouseout',this.controlersFadeOut).on('click',this.modalClick);
+        plModal.appendChild(plModalCLicable);
         
         this.plElemControler        = this._createElement('div',{'class': 'yt-player-controler'});
         this.plElementProgressBar   = this._createElement('div',{'class': 'yt-player-progressbar yt-player-effect'}).on('click',this.changeVideoPoint);
