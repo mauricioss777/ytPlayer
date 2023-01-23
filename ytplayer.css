@@ -162,7 +162,8 @@
     width: 40%;
     height: 5px;
     border-radius: 5px;
-    margin-bottom: 5.5px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .yt-player-volume-bar::-webkit-slider-thumb,
