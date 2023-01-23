@@ -500,11 +500,11 @@ class YTplayer {
      */
     _playerRender() {
         this._iframeRender();
-        let plModal = this._createElement('div',{'class': 'yt-player-modal'});//.on('mouseover',this.controlersFadeIn).on('mouseout',this.controlersFadeOut).on('click',this.modalClick);
+        let plModal = this._createElement('div',{'class': 'yt-player-modal'}).on('mouseover',this.controlersFadeIn).on('mouseout',this.controlersFadeOut);
         this.plElemTitle = this._createElement('div',{'class': 'yt-player-title'}).setHtml(this.title);
         plModal.appendChild(this.plElemTitle);
 
-        let plModalCLicable = this._createElement('div',{'class': 'yt-player-modal-clicable'}).on('mouseover',this.controlersFadeIn).on('mouseout',this.controlersFadeOut).on('click',this.modalClick);
+        let plModalCLicable = this._createElement('div',{'class': 'yt-player-modal-clicable'}).on('click',this.modalClick);
         plModal.appendChild(plModalCLicable);
         
         this.plElemControler        = this._createElement('div',{'class': 'yt-player-controler'});
