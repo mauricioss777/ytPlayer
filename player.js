@@ -209,6 +209,7 @@ class YTplayer {
         let plElemLightModal = null; // quando aperta na luz para apagar o que está ao redor, esse elemento fica do tamanho da tela e escurece ao redor do vídeo.
         let plBtnLight = null;// botão de desligar a luz
         let plBtnLightOn = null;//botão de ligar a luz
+        let flagYTReady = false;//variável que controla se o player do youtube está pronto
 
         this.url = init.url;
         this.title = init.title;
@@ -240,6 +241,10 @@ class YTplayer {
 
     controlersFadeOut(){
         if(globalThis.ytPlayer.getCurrentTime() < globalThis.ytPlayer.YT_LOGO_DISPLAY_TIME){ //HACK #1
+            return false;
+        }
+
+        if(typeof globalThis.ytPlayer.youtube.getPlayerState !== 'function'){
             return false;
         }
 
