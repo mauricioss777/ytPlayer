@@ -176,6 +176,9 @@ class YTplayer {
      * @param { PlayerConfig } init - Configurações para o player.
      */
     constructor(init) {
+        //--Constantes
+        this.YT_LOGO_DISPLAY_TIME = 5;//Constante que retorna o tempo que o logo do youtube fica visível
+
         //--variáveis da classe
         let url = null; // url do vídeo
         let title = null; // título do vídeo
@@ -235,6 +238,10 @@ class YTplayer {
     }
 
     controlersFadeOut(){
+        if(globalThis.ytPlayer.getCurrentTime() < globalThis.ytPlayer.YT_LOGO_DISPLAY_TIME){ //HACK #1
+            return false;
+        }
+
         if(globalThis.ytPlayer.youtube.getPlayerState() == 1){
             globalThis.ytPlayer.plElemControler.fadeOut();
             globalThis.ytPlayer.plElemTitle.fadeOut();
@@ -249,12 +256,15 @@ class YTplayer {
      * @description esta função dá play no vídeo.
      */
     play() { 
-        globalThis.ytPlayer.youtube.playVideo(); //para o vídeo no player do youtube
+        if(globalThis.ytPlayer.isFinishedVideo()){// HACK #1
+            return;
+        }
+        globalThis.ytPlayer.youtube.playVideo(); 
         globalThis.ytPlayer.plElemPlay.hide();
         globalThis.ytPlayer.plElemPause.show();
         setTimeout(function(){
             globalThis.ytPlayer.controlersFadeOut();
-        }, 5000);//5 segumdos para desaparecer o logo do youtube
+        }, (globalThis.ytPlayer.YT_LOGO_DISPLAY_TIME * 1200));//5 segumdos para desaparecer o logo do youtube
     }
 
     /**
@@ -330,10 +340,37 @@ class YTplayer {
             let percentil = (currentSeconds*100)/videoLenght;
             globalThis.ytPlayer.plElementProgressBar.element.style.setProperty('--progressbar-percentil', percentil+'%');
 
+            /**
+             * HACK #1
+             * Para remover as sugestões de vídeos ao final do vídeo do youtube, o player pausa 1 segundo antes de terminar o vídeo
+             */
+            if(globalThis.ytPlayer.isFinishedVideo()){
+                globalThis.ytPlayer.controlersFadeIn();
+                setTimeout(function(){
+                    globalThis.ytPlayer.pause();
+                }, 700);//aguarda 1 segundo até a animação do fadeIn terminar para que o logo do youtube não apareça
+                globalThis.ytPlayer.plElementProgressBar.element.style.setProperty('--progressbar-percentil', '100%'); //coloca o progressbar como se estivesse 
+                globalThis.ytPlayer.plElemTimeCurrentTime.setText(YTplayer._formatYTDateTime(currentSeconds +2)); //muda o tempo do pllayer para concluído
+
+            }
         }, 100);//a cada meio segundo, atualiza as informações do player
        
     }
 
+    /**
+     * HACK #1
+     * Método que verifica se o vídeo chegou ao fim.
+     * Este método faz parte do HACK que faz com que o vídeo pause antes do final para não aparecer as sugestões de vídeos do youtube.
+     * @returns boolean
+     */
+    isFinishedVideo(){
+        let currentSeconds = globalThis.ytPlayer.youtube.getCurrentTime();
+        let videoLenght = parseInt(globalThis.ytPlayer.videoLenght);
+        if(currentSeconds >= videoLenght -2){
+            return true;
+        }
+        return false;
+    }
     
     /**
      * Quando alguém clica na barra de progresso, este método é disparado.
