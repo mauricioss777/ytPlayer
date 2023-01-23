@@ -16,7 +16,6 @@ console.log(`
     - implementar multiplos players
     - implementar a função de retomar o vídeo de onde parou (youtube.playVideoAt(index:Number):Void)
     - implementar a velocidade do player (youtube.getPlaybackRate():Number) //0.25, 0.5, 1, 1.5 e 2
-    - BUG: o logotipo fica encima do progressbar e não é possível clicar nele
     - adicionar opção de trocar ícones
     - tratar o tamanho do título para que não extrapole a linha
     - testar responsividade
@@ -208,6 +207,7 @@ class YTplayer {
         let plBtnLight = null;// botão de desligar a luz
         let plBtnLightOn = null;//botão de ligar a luz
         let flagYTReady = false;//variável que controla se o player do youtube está pronto
+        let plModalCLicable = null;//elemento clicável do modal. Recebe o tumbnail como background
 
         this.url = init.url;
         this.title = init.title;
@@ -260,15 +260,19 @@ class YTplayer {
      * @description esta função dá play no vídeo.
      */
     play() { 
+
+
         if(globalThis.ytPlayer.isFinishedVideo() || !globalThis.ytPlayer.flagYTReady){// HACK #1
             return;
         }
         globalThis.ytPlayer.youtube.playVideo(); 
         globalThis.ytPlayer.plElemPlay.hide();
         globalThis.ytPlayer.plElemPause.show();
+        
         setTimeout(function(){
             globalThis.ytPlayer.controlersFadeOut();
         }, (globalThis.ytPlayer.YT_LOGO_DISPLAY_TIME * 1200));//5 segumdos para desaparecer o logo do youtube
+        globalThis.ytPlayer.plModalCLicable.element.style.opacity = "0";
     }
 
     /**
@@ -503,8 +507,13 @@ class YTplayer {
         this.plElemTitle = this._createElement('div',{'class': 'yt-player-title'}).setHtml(this.title);
         plModal.appendChild(this.plElemTitle);
 
-        let plModalCLicable = this._createElement('div',{'class': 'yt-player-modal-clicable'}).on('click',this.modalClick);
-        plModal.appendChild(plModalCLicable);
+        this.plModalCLicable = this._createElement('div',{'class': 'yt-player-modal-clicable yt-player-effect'}).on('click',this.modalClick);
+
+        this.plModalCLicable.element.style.background = 'url(https://img.youtube.com/vi/'+this.videoid+'/maxresdefault.jpg) center center no-repeat';
+        this.plModalCLicable.element.style.backgroundSize = 'cover';
+
+        
+        plModal.appendChild(this.plModalCLicable);
         
         this.plElemControler        = this._createElement('div',{'class': 'yt-player-controler'});
         this.plElementProgressBar   = this._createElement('div',{'class': 'yt-player-progressbar yt-player-effect'}).on('click',this.changeVideoPoint);
@@ -652,7 +661,9 @@ class YTplayer {
             height: globalThis.ytPlayer.config.height,
             width: globalThis.ytPlayer.config.width,
             videoId: globalThis.ytPlayer.videoid,
-            playerVars: {'controls': 0},
+            playerVars: {controls: 0,
+                            rel: 0,
+                            showinfo: 0},
             events: {
                 'onReady': globalThis.ytPlayer.youtubeOnPlayerReady,
                 'onStateChange': globalThis.ytPlayer.youtubeOnPlayerStateChange,
