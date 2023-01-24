@@ -178,6 +178,7 @@
     -moz-appearance: none;
     border: none;
     background-color: white;
+    background: white;
     box-shadow: none;
 }
 
