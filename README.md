@@ -11,7 +11,7 @@ Alternative player for YouTube player.
  - [ ] implementar multiplos players
  - [ ] implementar a função de retomar o vídeo de onde parou (youtube.playVideoAt(index:Number):Void)
  - [ ] implementar a velocidade do player (youtube.getPlaybackRate():Number) //0.25, 0.5, 1, 1.5 e 2
- - [ ] adicionar opção de trocar ícones
+ - [x] adicionar opção de trocar ícones
  - [ ] tratar o tamanho do título para que não extrapole a linha
  - [ ] testar responsividade
  - [ ] verificar integração com chromecast

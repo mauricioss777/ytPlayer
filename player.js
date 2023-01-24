@@ -12,6 +12,17 @@
  * @property { string } url - O link do vídeo no youtube.
  * @property { string } videoid - O id do vídeo. Você pode optar por usar 'url' ou 'videoid'.
  * @property { string } logo - Opcionalmente você adicionar seu logotipo no player basta inserir a url da imagem.
+ * @property { Object } customIcons - Opcionalmente, você pode usar ícones alternativos.
+ * @property { string } customIcons.play - O ícone de tocar.
+ * @property { string } customIcons.pause - O ícone de pausar.
+ * @property { string } customIcons.next - O ícone de próximo.
+ * @property { string } customIcons.back - O ícone de voltar.
+ * @property { string } customIcons.volumeMute - O ícone de mutar.
+ * @property { string } customIcons.fullscreen - O ícone de tela cheia.
+ * @property { string } customIcons.fullscreenOff - O ícone de fechar tela cheia.
+ * @property { string } customIcons.caption - O ícone de closed captions.
+ * @property { string } customIcons.lightOn - O ícone de ligar a luz.
+ * @property { string } customIcons.lightOff - O ícone de apagar a luz.
  */
 
 /**
@@ -192,6 +203,13 @@ class YTplayer {
         this.title = init.title;
         this.logo = init.logo;
         this.icons = this._loadIcons();
+
+        // Define os ícones do usuário.
+        for (let index in init.customIcons) {
+            let customIcon = init.customIcons[index];
+
+            if (customIcon) this.icons[index] = customIcon;
+        }
 
         if (!this.videoid) {
             this.videoid = this._ytParser(this.url);
@@ -773,29 +791,26 @@ class YTplayer {
     }
 
     _loadIcons() {
-        let iconsPack = {
-            'default': {
-                'play': '<i class="bi bi-play-fill"></i>',
-                'pause': '<i class="bi bi-pause"></i>',
-                'next': '<i class="bi bi-skip-end"></i>',
-                'back': '<i class="bi bi-skip-start"></i>',
-                'volumeFull': '<i class="bi bi-volume-up"></i>',
-                'volumeDown': '<i class="bi bi-volume-down"></i>',
-                'volumeMute': '<i class="bi bi-volume-mute"></i>',
-                'fullscreen': '<i class="bi bi-fullscreen"></i>',
-                'fullscreenOff': '<i class="bi bi-fullscreen-exit"></i>',
-                'caption': '<i class="bi bi-badge-cc"></i>',
-                'lightOn': '<i class="bi bi-lightbulb-off"></i>',
-                'lightOff': '<i class="bi bi-lightbulb"></i>'
-
-            }
-        };
+        let defaultIcons = {
+            'play': '<i class="bi bi-play-fill"></i>',
+            'pause': '<i class="bi bi-pause"></i>',
+            'next': '<i class="bi bi-skip-end"></i>',
+            'back': '<i class="bi bi-skip-start"></i>',
+            'volumeFull': '<i class="bi bi-volume-up"></i>',
+            'volumeDown': '<i class="bi bi-volume-down"></i>',
+            'volumeMute': '<i class="bi bi-volume-mute"></i>',
+            'fullscreen': '<i class="bi bi-fullscreen"></i>',
+            'fullscreenOff': '<i class="bi bi-fullscreen-exit"></i>',
+            'caption': '<i class="bi bi-badge-cc"></i>',
+            'lightOn': '<i class="bi bi-lightbulb-off"></i>',
+            'lightOff': '<i class="bi bi-lightbulb"></i>'
+        }
 
         let bootstrapicons = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">';
         document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', bootstrapicons);
 
-        this.icons = iconsPack['default'];
-        return iconsPack['default'];
+        
+        return defaultIcons;
     }
 
     /*
