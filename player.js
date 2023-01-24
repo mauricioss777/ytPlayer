@@ -250,6 +250,7 @@ class YTplayer {
         
         setTimeout(function(){
             globalThis.ytPlayer.controlersFadeOut();
+            globalThis.ytPlayer.element.background = transparent;
         }, (globalThis.ytPlayer.YT_LOGO_DISPLAY_TIME * 1200));//5 segumdos para desaparecer o logo do youtube
         globalThis.ytPlayer.plModalCLicable.element.style.opacity = "0";
     }
@@ -293,6 +294,7 @@ class YTplayer {
         } else if (aux.msRequestFullscreen && !document.fullscreenElement) { /* IE11 */
             aux.msRequestFullscreen();
         }
+        aux.classList.add('yt-player-fullscreen');
         globalThis.ytPlayer.plElemFullscreenOff.show();
         globalThis.ytPlayer.plElemFullscreenOn.hide();
      }
@@ -309,6 +311,8 @@ class YTplayer {
         } else if (document.msExitFullscreen  && document.fullscreenElement) { /* IE11 */
             document.msExitFullscreen();
         }
+        let aux = document.getElementById(globalThis.ytPlayer.config.sectionid);
+        aux.classList.remove('yt-player-fullscreen');
         globalThis.ytPlayer.plElemFullscreenOn.show();
         globalThis.ytPlayer.plElemFullscreenOff.hide();
     }
