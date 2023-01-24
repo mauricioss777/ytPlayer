@@ -21,6 +21,7 @@ console.log(`
     - testar responsividade
     - verificar integração com chromecast
     - criar hooks para adicionar ações ao player
+    - o background do título e dos elementos do player só precisam estar com uma cor sólida quando o player for pausado.
 
 
 `);
