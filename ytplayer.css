@@ -143,6 +143,8 @@
     cursor: pointer;
 }
 
+#yt-player.yt-player-fullscreen .yt-player-light,
+#yt-player.yt-player-fullscreen .yt-player-modal-light-off,
 #yt-player .yt-player-modal .yt-player-element-hidden{
     display: none;
 }
