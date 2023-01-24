@@ -166,18 +166,27 @@
 .yt-player-volume-bar {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-color: white;
+    appearance: none;
     width: 80px;
     height: 5px;
     border-radius: 5px;
 }
 
-.yt-player-volume-bar::-webkit-slider-thumb,
-.yt-player-volume-bar::-moz-range-thumb {
-    -webkit-appearance: none;
-    -moz-appearance: none;
+.yt-player-volume-bar::-webkit-slider-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
     border: none;
     background-color: white;
+    box-shadow: none;
+    border-radius: 50%;
+}
+
+.yt-player-volume-bar::-moz-range-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border: none;
     background: white;
     box-shadow: none;
 }
