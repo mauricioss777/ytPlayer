@@ -7,7 +7,7 @@
 
 console.log(`
     ToDO List:
-    - implementar volume
+    - consertar o alinhamento do controle de volume
     - implementar cc
     - implementar intro personalizada 
     - implementar assinatura personalizada
@@ -538,7 +538,9 @@ class YTplayer {
         this.plElemPlay    = this._createElement('a', {'href': '#', 'class': 'yt-player-play yt-player-btn'}).setHtml(this.icons.play).on('click',this.play);
         this.plElemPause   = this._createElement('a', {'href': '#', 'class': 'yt-player-pause yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.pause).on('click',this.pause);
         this.plElemNextVideo    = this._createElement('a', {'href': '#', 'class': 'yt-player-next yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.next).on('click',this.nextVideo);
-        this.plElemVolume  = this._createElement('a', {'href': '#', 'class': 'yt-player-volume yt-player-btn'}).setHtml(this.icons.volumeFull).on('click',this._volumeControl.bind(this));
+
+        this.plVolumeControl = this._createElement('div', { class: 'yt-player-audio-control' }).on('mouseenter',this._volumeControl.bind(this)).on('mouseleave', this._volumeControl.bind(this));
+        this.plElemVolume  = this._createElement('a', {'href': '#', 'class': 'yt-player-volume yt-player-btn'}).setHtml(this.icons.volumeFull);
         this.plVolumeBar = this._createElement('input', {
             class: 'yt-player-volume-bar yt-player-element-hidden',
             type: 'range',
@@ -554,12 +556,15 @@ class YTplayer {
                     .appendChild(this.plElemTimeVideoLenght);
 
 
+        this.plVolumeControl
+            .appendChild(this.plElemVolume)
+            .appendChild(this.plVolumeBar);
+
         plElemControlersLeft.appendChild(this.plElemPreviusVideo)
                         .appendChild(this.plElemPlay)
                         .appendChild(this.plElemPause)
                         .appendChild(this.plElemNextVideo)
-                        .appendChild(this.plElemVolume)
-                        .appendChild(this.plVolumeBar)
+                        .appendChild(this.plVolumeControl)
                         .appendChild(plElemTime);
        
 
