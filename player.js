@@ -12,6 +12,8 @@
  * @property { string } url - O link do vídeo no youtube.
  * @property { string } videoid - O id do vídeo. Você pode optar por usar 'url' ou 'videoid'.
  * @property { string } logo - Opcionalmente você adicionar seu logotipo no player basta inserir a url da imagem.
+ * @property { Object } previusLink - Opcinalmente, você pode adicionar um link/video ao botão voltar {link: '', alt: '', desc: ''}
+ * @property { Object } nextLink - Opcinalmente, você pode adicionar um link para a próxima página/vídeo {link: '', alt: '', desc: ''}
  * @property { Object } customIcons - Opcionalmente, você pode usar ícones alternativos.
  * @property { string } customIcons.play - O ícone de tocar.
  * @property { string } customIcons.pause - O ícone de pausar.
@@ -175,10 +177,10 @@ class YTplayer {
         let youtube = null; // player do youtube que será controlado pelo player element 
     
         //variáveis do player
-        let plElemPreviusVideo = null; //recebe o elemento html responsável pelo vídeo/link passado
         let plElemPlay =  null; // elemento html do botão play
         let plElemPause =  null; // elemento html do botão pause
-        let plElemNextVideo =  null; // elemento html do botão que direciona para o próximo vídeo
+        let plElemPreviusLink = null; //recebe o elemento html responsável pelo vídeo/link do botão voltar passado
+        let plElemNextLink =  null; // elemento html do botão que direciona para o próximo vídeo/página
         let plElemVolume =  null;  // elemento html do botão vloume
         let plElemTimeCurrentTime =  null;  // elemento html do texto contendo o tempo atual decorrido do vídeo
         let plElemTimeVideoLenght =  ''; // elemento html texto que mostra o tamanho do vídeo
@@ -200,6 +202,8 @@ class YTplayer {
         this.title = init.title;
         this.logo = init.logo;
         this.icons = this._loadIcons();
+        init.previusLink ? this.previusLink = init.previusLink : null; 
+        init.nextLink ? this.nextLink = init.nextLink : null; 
 
         // Define os ícones do usuário.
         for (let index in init.customIcons) {
@@ -275,7 +279,11 @@ class YTplayer {
         globalThis.ytPlayer.plElemPlay.show();
         globalThis.ytPlayer.plElemPause.hide();
     }
-    nextVideo() { console.log('nextVideo'); }
+    nextVideo() { 
+
+        console.log("nextVideo");
+
+    }
 
     _hideVolumeBar() {
         this.plVolumeBar.hide();
@@ -529,10 +537,14 @@ class YTplayer {
         
         let plElemControlersLeft = this._createElement('span',{'class':'yt-player-controlers-left' });
 
-        this.plElemPreviusVideo    = this._createElement('a', {'href': '#', 'class': 'yt-player-back yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.back).on('click', this.previousVideo);
+        this.plElemPreviusLink    = this._createElement('a', {'href': '#', 'class': 'yt-player-back yt-player-btn'}).setHtml(this.icons.back).on('click', this.previousVideo);
+        this.plElemNextLink       = this._createElement('a', {'href': '#', 'class': 'yt-player-next yt-player-btn'}).setHtml(this.icons.next).on('click',this.nextVideo);
+        this.previusLink ? setAttributes(this.plElemNextLink.element, {'href': this.previusLink.link, 'alt': this.previusLink.alt}) : this.plElemPreviusLink.hide();
+        this.nextLink ? setAttributes(this.plElemPreviusLink.element, {'href': this.nextLink.link, 'alt': this.nextLink.alt}) : this.plElemNextLink.hide();
+
         this.plElemPlay    = this._createElement('a', {'href': '#', 'class': 'yt-player-play yt-player-btn'}).setHtml(this.icons.play).on('click',this.play);
         this.plElemPause   = this._createElement('a', {'href': '#', 'class': 'yt-player-pause yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.pause).on('click',this.pause);
-        this.plElemNextVideo    = this._createElement('a', {'href': '#', 'class': 'yt-player-next yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.next).on('click',this.nextVideo);
+       
 
         this.plVolumeControl = this._createElement('div', { class: 'yt-player-audio-control' }).on('mouseenter',this._volumeControl.bind(this)).on('mouseleave', this._volumeControl.bind(this));
         this.plElemVolume  = this._createElement('a', {'href': '#', 'class': 'yt-player-volume yt-player-btn'}).setHtml(this.icons.volumeFull);
@@ -555,10 +567,10 @@ class YTplayer {
             .appendChild(this.plElemVolume)
             .appendChild(this.plVolumeBar);
 
-        plElemControlersLeft.appendChild(this.plElemPreviusVideo)
+        plElemControlersLeft.appendChild(this.plElemPreviusLink)
                         .appendChild(this.plElemPlay)
                         .appendChild(this.plElemPause)
-                        .appendChild(this.plElemNextVideo)
+                        .appendChild(this.plElemNextLink)
                         .appendChild(this.plVolumeControl)
                         .appendChild(plElemTime);
        
@@ -593,29 +605,6 @@ class YTplayer {
         this.playerElement.appendChild(this.plElemLightModal.element);
 
 
-        /* //a organização do código acima gera o html abaixo
-            div.yt-player-modal
-                div.yt-player-title ${this.title}
-                div.yt-player-controler
-                    span.yt-player-btn yt-player-controlers-top-right
-                        a.yt-player-light yt-player-btn ${this.icons.lightOn}
-                    span.yt-player-controlers-left
-                        a.yt-player-back yt-player-btn yt-player-element-hidden ${this.icons.back}
-                        a.yt-player-play yt-player-btn ${this.icons.play}
-                        a.yt-player-pause yt-player-btn yt-player-element-hidden ${this.icons.pause}
-                        a.yt-player-next yt-player-btn yt-player-element-hidden ${this.icons.next}
-                        a.yt-player-volume yt-player-btn ${this.icons.volumeFull}
-                        span.yt-player-time
-                            span.yt-player-currenttime ${this.currentTime}
-                            span.yt-player-videolength ${this.videoLength}
-                    span.yt-player-controlers-center
-                    span.yt-player-controlers-right
-                        a.yt-player-caption yt-player-btn yt-player-element-hidden ${this.icons.caption}
-                        a.yt-player-fullscreen-exit yt-player-btn yt-player-element-hidden ${this.icons.fullscreenOff}
-                        a.yt-player-fullscreen yt-player-btn ${this.icons.fullscreen}
-                div.yt-player-logo
-                    img src ${this.logo}
-            */
 
     }
 
