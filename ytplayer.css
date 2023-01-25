@@ -370,8 +370,8 @@
     display: block;
     position: absolute;
     content: "06:10";
-    background-color: rgb(0,0,0);
-    border: solid 1px #757575;
+    background-color: var(--controler-background);
+    border: solid 1px var(--progressbar-background);
     padding: 5px;
     left: 100px;
     top: 70px;
