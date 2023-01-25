@@ -6,7 +6,7 @@ Alternative player for YouTube player.
  - [ ] implementar cc
  - [ ] implementar intro personalizada 
  - [ ] implementar assinatura personalizada
- - [ ] implementar links de avançar e voltar
+ - [x] implementar links de avançar e voltar
  - [ ] implementar thumbnail
  - [ ] implementar multiplos players
  - [ ] implementar a função de retomar o vídeo de onde parou (youtube.playVideoAt(index:Number):Void)

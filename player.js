@@ -12,8 +12,8 @@
  * @property { string } url - O link do vídeo no youtube.
  * @property { string } videoid - O id do vídeo. Você pode optar por usar 'url' ou 'videoid'.
  * @property { string } logo - Opcionalmente você adicionar seu logotipo no player basta inserir a url da imagem.
- * @property { Object } previusLink - Opcinalmente, você pode adicionar um link/video ao botão voltar {link: '', alt: '', desc: ''}
- * @property { Object } nextLink - Opcinalmente, você pode adicionar um link para a próxima página/vídeo {link: '', alt: '', desc: ''}
+ * @property { Object } previusLink - Opcinalmente, você pode adicionar um link/video ao botão voltar {link: '', alt: '', tumbnail: '', title: ''}
+ * @property { Object } nextLink - Opcinalmente, você pode adicionar um link para a próxima página/vídeo {link: '', alt: '', tumbnail: '', title: ''}
  * @property { Object } customIcons - Opcionalmente, você pode usar ícones alternativos.
  * @property { string } customIcons.play - O ícone de tocar.
  * @property { string } customIcons.pause - O ícone de pausar.
@@ -173,6 +173,16 @@ class ChainableElementRepresenter {
         }
         return this;
     }
+
+    setToolTip(info){
+        let tooltip = new ChainableElementRepresenter(document.createElement('span')).addClass('yt-player-tooltip');
+        tooltip.element.style=  "--tooltip-image: url('"+info.tumbnail+"'); --tooltip-title:'"+info.title+"';";
+            
+        this.addClass('yt-player-has-tooltip');
+        info.type == 'video' ? this.addClass('yt-player-type-video') : this.addClass('yt-player-type-link');
+        this.insertAdjacentElement('beforeend',tooltip.element);
+        return this;
+    }
 }
 
 
@@ -243,8 +253,8 @@ class YTplayer {
         this.title = init.title;
         this.logo = init.logo;
         this.icons = this._loadIcons();
-        init.previusLink ? this.previusLink = init.previusLink : null; 
-        init.nextLink ? this.nextLink = init.nextLink : null; 
+        init.previusInfo ? this.previusInfo = init.previusInfo : null; 
+        init.nextInfo ? this.nextInfo = init.nextInfo : null; 
 
         // Define os ícones do usuário.
         for (let index in init.customIcons) {
@@ -577,9 +587,21 @@ class YTplayer {
         let plElemControlersLeft = this._createElement('span',{'class':'yt-player-controlers-left' });
 
         this.plElemPreviusLink    = this._createElement('a', {'href': '#', 'class': 'yt-player-back yt-player-btn'}).setHtml(this.icons.back).on('click', this.previousVideo);
+        if(this.previusInfo){
+            this.plElemPreviusLink.setAttributes( {'href': this.previusInfo.link});
+            this.plElemPreviusLink.setToolTip(this.previusInfo);
+        }else{
+            this.plElemPreviusLink.hide();
+        } 
+
         this.plElemNextLink       = this._createElement('a', {'href': '#', 'class': 'yt-player-next yt-player-btn'}).setHtml(this.icons.next).on('click',this.nextVideo);
-        this.previusLink ? this.plElemNextLink.setAttributes( {'href': this.previusLink.link, 'alt': this.previusLink.alt}) : this.plElemPreviusLink.hide();
-        this.nextLink ? this.plElemPreviusLink.setAttributes({'href': this.nextLink.link, 'alt': this.nextLink.alt}) : this.plElemNextLink.hide();
+        if(this.nextInfo){
+            this.plElemNextLink.setAttributes( {'href': this.nextInfo.link});
+            this.plElemNextLink.setToolTip(this.nextInfo);
+        }else{
+            this.plElemNextLink.hide();
+        } 
+        
 
         this.plElemPlay    = this._createElement('a', {'href': '#', 'class': 'yt-player-play yt-player-btn'}).setHtml(this.icons.play).on('click',this.play);
         this.plElemPause   = this._createElement('a', {'href': '#', 'class': 'yt-player-pause yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.pause).on('click',this.pause);
