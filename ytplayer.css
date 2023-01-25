@@ -3,12 +3,15 @@
  * às suas necessidades
  */
 :root {
-
+    /* configurações gerais do player*/
+    --player-opacity: 0.4;
+    --border-radius: 10px;
+    
     /* configuração da barra de título*/
     --title-color: #FFF;
-    --title-background: rgba(0, 0, 0, 1);
+    --title-background: rgba(0, 0, 0, var(--player-opacity));
     --title-height: 55px;
-    --title-width: auto;
+    --title-width: auto;rgb(36, 15, 15)
     --title-align: left;
     --title-pading: 0px 0px 0px 10px;
     --title-font-family: Arial, Helvetica, sans-serif; 
@@ -24,15 +27,16 @@
     --controler-font-family: var(--title-font-family);
     --controler-font-weight: normal;
     --controler-icons-size: 24px;
-    --progressbar: #00FFFF;
+    --progressbar: rgba(0,255,255);
     --progressbar-background: #666;
+    --progressbar-background: rgba(200,200,200,var(--player-opacity));
 
     /* 
     * configura o logotipo
     * o ideal é que o logotipo tenha um fundo transparente
     */
     --logo-height: 50px;
-    --logo-opacity: 0.5;
+    --logo-opacity: 0.7;
   /*
   * NÃO MODIFICAR DAQUI PARA BAIXO
   */
@@ -53,6 +57,15 @@
     height: 100%;
     background-color: aquamarine;
     z-index: 9900;
+    -webkit-border-radius: var(--border-radius);
+    -moz-border-radius: var(--border-radius);
+    border-radius: var(--border-radius);
+    
+}
+#yt-player .youtube-player{
+    -webkit-border-radius: var(--border-radius);
+    -moz-border-radius: var(--border-radius);
+    border-radius: var(--border-radius);
 }
 
 #yt-player .yt-player-modal{
@@ -70,7 +83,9 @@
     width: 100%;
     height: 100%;
     z-index: 9999;
-
+    -webkit-border-radius: var(--border-radius);
+    -moz-border-radius: var(--border-radius);
+    border-radius: var(--border-radius);
 }
 
 #yt-player .yt-player-modal-clicable {
@@ -95,6 +110,9 @@
     font-family: var(--title-font-family);
     font-size: var(--title-font-size);
     font-weight: var(--title-font-weight);
+    -webkit-border-radius: var(--border-radius) var(--border-radius) 0px 0px;
+    -moz-border-radius: var(--border-radius) var(--border-radius) 0px 0px;
+    border-radius: var(--border-radius) var(--border-radius) 0px 0px;
 }
 #yt-player .yt-player-modal .yt-player-controler{
     display: flex;
@@ -108,6 +126,9 @@
     font-family: var(--controler-font-family);
     font-weight: var(--controler-font-weight);
     font-size: var(--controler-icons-size);
+    -webkit-border-radius: 0px 0px var(--border-radius) var(--border-radius);
+    -moz-border-radius: 0px 0px var(--border-radius) var(--border-radius);
+    border-radius: 0px 0px var(--border-radius) var(--border-radius);
 }
 
 /*controla a barra de progresso do vídeo*/
@@ -256,20 +277,21 @@
     display: flex;
     font-family:'Bootstrap-icons';
     content: "\F4F3";
-    font-size: 5vw;
+    font-size: 3vw;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
     background-color: rgba(255,255,255,0.5);
-    
+    color: var(--controler-color);
+    background-color: var(--controler-background);
     top: 0px;
     left: 0px;
     transition: all 0.5s;
 }
 #yt-player .yt-player-modal-clicable:hover:after{
     cursor: pointer;
-    font-size: 6vw;
+    font-size: 3.5vw;
 }
 
 

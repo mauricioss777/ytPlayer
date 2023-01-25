@@ -163,9 +163,6 @@ class YTplayer {
      * @param { PlayerConfig } init - Configurações para o player.
      */
     constructor(init) {
-        //--Constantes
-        this.YT_LOGO_DISPLAY_TIME = 5;//Constante que retorna o tempo que o logo do youtube fica visível
-
         //--variáveis da classe
         let url = null; // url do vídeo
         let title = null; // título do vídeo
@@ -235,22 +232,22 @@ class YTplayer {
     }
 
     controlersFadeOut(){
-        if(globalThis.ytPlayer.getCurrentTime() < globalThis.ytPlayer.YT_LOGO_DISPLAY_TIME){ //HACK #1
-            return false;
-        }
-
         if(typeof globalThis.ytPlayer.youtube.getPlayerState !== 'function'){
             return false;
         }
-
+       
         if(globalThis.ytPlayer.youtube.getPlayerState() == 1){
             globalThis.ytPlayer.plElemControler.fadeOut();
             globalThis.ytPlayer.plElemTitle.fadeOut();
+            globalThis.ytPlayer.plModalCLicable.fadeOut();
         }
     }
     controlersFadeIn(){
+        console.log('chegou aqui - controlersFadeIn');
         globalThis.ytPlayer.plElemControler.fadeIn();
         globalThis.ytPlayer.plElemTitle.fadeIn();
+        globalThis.ytPlayer.plModalCLicable.fadeIn();
+        globalThis.ytPlayer.plModalCLicable.element.style.background = 'none';
     }
 
     /**
@@ -258,25 +255,22 @@ class YTplayer {
      */
     play() { 
 
-
         if(globalThis.ytPlayer.isFinishedVideo() || !globalThis.ytPlayer.flagYTReady){// HACK #1
             return;
         }
         globalThis.ytPlayer.youtube.playVideo(); 
         globalThis.ytPlayer.plElemPlay.hide();
         globalThis.ytPlayer.plElemPause.show();
+        globalThis.ytPlayer.controlersFadeOut();
         
-        setTimeout(function(){
-            globalThis.ytPlayer.controlersFadeOut();
-            globalThis.ytPlayer.element.background = transparent;
-        }, (globalThis.ytPlayer.YT_LOGO_DISPLAY_TIME * 1200));//5 segumdos para desaparecer o logo do youtube
-        globalThis.ytPlayer.plModalCLicable.element.style.opacity = "0";
     }
 
     /**
      * @description esta função pausa o vídeo
      */
     pause() { 
+        globalThis.ytPlayer.controlersFadeIn();
+
         globalThis.ytPlayer.youtube.pauseVideo();
         globalThis.ytPlayer.plElemPlay.show();
         globalThis.ytPlayer.plElemPause.hide();
@@ -593,7 +587,7 @@ class YTplayer {
         this.plElemControler.appendChild(plElemControlersLeft);
         this.plElemControler.appendChild(plElemControlersCenter);
         this.plElemControler.appendChild(plElemControlersRight);
-        this.plElemControler.appendChild(this.plLogoSpan);
+        plModal.appendChild(this.plLogoSpan);
         plModal.appendChild(this.plElemControler);
         this.playerElement.appendChild(plModal.element);
         this.playerElement.appendChild(this.plElemLightModal.element);
