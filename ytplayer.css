@@ -225,13 +225,18 @@
     display: inline-block;
     font-size: 12px;
     vertical-align: middle;
+    margin-bottom: 2px;
 }
 #yt-player .yt-player-modal .yt-player-controler .yt-player-time .yt-player-currenttime::after{
     content: " / ";
 }
     
-#yt-player .yt-player-modal .yt-player-controler .yt-player-back{}
-#yt-player .yt-player-modal .yt-player-controler .yt-player-next{}
+#yt-player .yt-player-modal .yt-player-controler .yt-player-back{
+    margin-left: 10px;
+}
+#yt-player .yt-player-modal .yt-player-controler .yt-player-next{
+    margin-right: 10px;
+}
 #yt-player .yt-player-modal .yt-player-controler .yt-player-caption{}
 
 #yt-player .yt-player-modal .yt-player-controler .yt-player-fullscreen,

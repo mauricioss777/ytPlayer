@@ -121,6 +121,7 @@ class ChainableElementRepresenter {
         this.element.style.opacity = '0.0';
         return this;
     }
+    
     fadeIn(){
         if(this.element.style.opacity == '1.0'){
             return this;
