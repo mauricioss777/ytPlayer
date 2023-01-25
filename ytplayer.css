@@ -101,6 +101,7 @@
 #yt-player .yt-player-modal .yt-player-title{
     display: flex;
     background-color: var(--title-background);
+    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,var(--player-opacity)) 100%);
     width: var(--title-width);
     height: var(--title-height);
     color: var(--title-color);
@@ -182,6 +183,8 @@
 .yt-player-audio-control, .yt-player-volume-bar {
     display: inline-block;
     vertical-align: middle;
+    margin-bottom: 2px;
+    
 }
 
 .yt-player-volume-bar {
