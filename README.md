@@ -2,7 +2,7 @@
 Alternative player for YouTube player.
 
 ## to-do
- - [ ] consertar o alinhamento do controle de volume
+ - [x] consertar o alinhamento do controle de volume
  - [ ] implementar cc
  - [ ] implementar intro personalizada 
  - [ ] implementar assinatura personalizada
