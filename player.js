@@ -12,8 +12,8 @@
  * @property { string } url - O link do vídeo no youtube.
  * @property { string } videoid - O id do vídeo. Você pode optar por usar 'url' ou 'videoid'.
  * @property { string } logo - Opcionalmente você adicionar seu logotipo no player basta inserir a url da imagem.
- * @property { Object } previusLink - Opcinalmente, você pode adicionar um link/video ao botão voltar {link: '', alt: '', tumbnail: '', title: ''}
- * @property { Object } nextLink - Opcinalmente, você pode adicionar um link para a próxima página/vídeo {link: '', alt: '', tumbnail: '', title: ''}
+ * @property { Object } previusLink - Opcinalmente, você pode adicionar um link/video ao botão voltar {link: '', alt: '', thumbnail: '', title: ''}
+ * @property { Object } nextLink - Opcinalmente, você pode adicionar um link para a próxima página/vídeo {link: '', alt: '', thumbnail: '', title: ''}
  * @property { Object } customIcons - Opcionalmente, você pode usar ícones alternativos.
  * @property { string } customIcons.play - O ícone de tocar.
  * @property { string } customIcons.pause - O ícone de pausar.
@@ -176,7 +176,7 @@ class ChainableElementRepresenter {
 
     setToolTip(info){
         let tooltip = new ChainableElementRepresenter(document.createElement('span')).addClass('yt-player-tooltip');
-        tooltip.element.style=  "--tooltip-image: url('"+info.tumbnail+"'); --tooltip-title:'"+info.title+"';";
+        tooltip.element.style=  "--tooltip-image: url('"+info.thumbnail+"'); --tooltip-title:'"+info.title+"';";
             
         this.addClass('yt-player-has-tooltip');
         info.type == 'video' ? this.addClass('yt-player-type-video') : this.addClass('yt-player-type-link');
@@ -247,7 +247,7 @@ class YTplayer {
         let plBtnLight = null;// botão de desligar a luz
         let plBtnLightOn = null;//botão de ligar a luz
         let flagYTReady = false;//variável que controla se o player do youtube está pronto
-        let plModalCLicable = null;//elemento clicável do modal. Recebe o tumbnail como background
+        let plModalCLicable = null;//elemento clicável do modal. Recebe o thumbnail como background
 
         this.url = init.url;
         this.title = init.title;
