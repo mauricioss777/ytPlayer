@@ -113,6 +113,10 @@ class ChainableElementRepresenter {
         return this;
     }
 
+    /**
+     * Faz o efeito de fadeOut em um elemento
+     * @returns Retorna a si mesmo para fazer chain.
+     */
     fadeOut(){
         if(!this.element.classList.contains('yt-player-effect')){
             this.element.classList.add('yt-player-effect');
@@ -121,7 +125,11 @@ class ChainableElementRepresenter {
         this.element.style.opacity = '0.0';
         return this;
     }
-    
+
+    /**
+     * Faz o efeito de fadeIn em um elemento
+     * @returns Retorna a si mesmo para fazer chain.
+     */
     fadeIn(){
         if(this.element.style.opacity == '1.0'){
             return this;
@@ -131,6 +139,38 @@ class ChainableElementRepresenter {
         }
 
         this.element.style.opacity = '1.0';
+        return this;
+    }
+
+    /**
+     * Adiciona uma classe ao elemento
+     * @param { string } elClass  - nome da classe a ser adicionada
+     * @returns Retorna a si mesmo para fazer chain.
+     */
+    addClass(elClass){
+        this.element.classList.add(elClass);
+        return this;
+    }
+    /**
+     * Remove uma classe do elemento
+     * @param { string } elClass - nome da classe a ser removida
+     * @returns Retorna a si mesmo para fazer chain.
+     */
+    removeClass(elClass){
+        this.element.classList.remove(elClass);
+        return this;
+    }
+
+    /**
+     * Defini atributos para um elemento.
+     * @param { HTMLElement } element - O elemento que terá seus atributos definidos.
+     * @param { Object } attributes - Os atributos a serem definidos.
+     * @returns Retorna a si mesmo para fazer chain.
+     */
+    setAttributes(attributes) {
+        for (var key in attributes) {
+            this.element.setAttribute(key, attributes[key]);
+        }
         return this;
     }
 }
@@ -497,9 +537,7 @@ class YTplayer {
      */
     _createElement(type, option){
         let element = document.createElement(type);
-        setAttributes(element, option);
-        
-        return new ChainableElementRepresenter(element);
+        return new ChainableElementRepresenter(element).setAttributes(option);
     }
 
     /**
@@ -540,8 +578,8 @@ class YTplayer {
 
         this.plElemPreviusLink    = this._createElement('a', {'href': '#', 'class': 'yt-player-back yt-player-btn'}).setHtml(this.icons.back).on('click', this.previousVideo);
         this.plElemNextLink       = this._createElement('a', {'href': '#', 'class': 'yt-player-next yt-player-btn'}).setHtml(this.icons.next).on('click',this.nextVideo);
-        this.previusLink ? setAttributes(this.plElemNextLink.element, {'href': this.previusLink.link, 'alt': this.previusLink.alt}) : this.plElemPreviusLink.hide();
-        this.nextLink ? setAttributes(this.plElemPreviusLink.element, {'href': this.nextLink.link, 'alt': this.nextLink.alt}) : this.plElemNextLink.hide();
+        this.previusLink ? this.plElemNextLink.setAttributes( {'href': this.previusLink.link, 'alt': this.previusLink.alt}) : this.plElemPreviusLink.hide();
+        this.nextLink ? this.plElemPreviusLink.setAttributes({'href': this.nextLink.link, 'alt': this.nextLink.alt}) : this.plElemNextLink.hide();
 
         this.plElemPlay    = this._createElement('a', {'href': '#', 'class': 'yt-player-play yt-player-btn'}).setHtml(this.icons.play).on('click',this.play);
         this.plElemPause   = this._createElement('a', {'href': '#', 'class': 'yt-player-pause yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.pause).on('click',this.pause);
@@ -619,25 +657,10 @@ class YTplayer {
         let iframeContainer = this._createElement('div',{'id':'youtube-player', 'class':'youtube-player','style':'position: relative; z-index: 9900 !important;'});
         this.playerElement.appendChild(iframeContainer.element);
 
-
         let tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         let firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        let ytframe = document.getElementById('youtube-player');
-        
-        setAttributes(ytframe,{
-            'src': this.url,
-            'width': this.config.width,
-            'height': this.config.height,
-            'height': this.config.height,
-            'frameborder': this.config.frameborder,
-            'title': this.config.iframeTitle,
-            'allow': allow,
-            'allowfullscreen': 'allowfullscreen'
-
-        });
 
         globalThis.onYouTubeIframeAPIReady = this.onYouTubeIframeAPIReady;
         globalThis.ytPlayer = this;
@@ -828,13 +851,3 @@ class YTplayer {
     }
 };
 
-/**
- * Defini atributos para um elemento.
- * @param { HTMLElement } element - O elemento que terá seus atributos definidos.
- * @param { Object } attributes - Os atributos a serem definidos.
- */
-function setAttributes(element, attributes) {
-    for (var key in attributes) {
-        element.setAttribute(key, attributes[key]);
-    }
-}
