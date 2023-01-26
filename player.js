@@ -352,7 +352,27 @@ class YTplayer {
     }
 
     _setVolume(event) {
-        globalThis.ytPlayer.youtube.setVolume(event.target.value);
+        let volume = event.target.value;
+        if(volume === undefined){
+            if(globalThis.ytPlayer.youtube.getVolume() != globalThis.ytPlayer.plVolumeBar.element.value){
+                volume = globalThis.ytPlayer.plVolumeBar.element.value;
+            }else{
+                volume = 0;
+            }
+            
+            globalThis.ytPlayer._volumeControl();
+        }
+        globalThis.ytPlayer.youtube.setVolume(volume);
+        if(volume == 0){
+            globalThis.ytPlayer.plElemVolume.setHtml(globalThis.ytPlayer.icons.volumeMute);
+        }
+        if(volume > 0 && volume <= 50){
+            globalThis.ytPlayer.plElemVolume.setHtml(globalThis.ytPlayer.icons.volumeDown);
+        }
+        if(volume > 50){
+            globalThis.ytPlayer.plElemVolume.setHtml(globalThis.ytPlayer.icons.volumeFull);
+        }
+
     }
 
     fullscreenOn() {
@@ -617,6 +637,8 @@ class YTplayer {
             value: '75'
         }).on('change', this._setVolume);
         
+        this.plVolumeControl.on('click', this._setVolume);
+
         let plElemTime    = this._createElement('span',{'class':'yt-player-time'});
         this.plElemTimeCurrentTime    = this._createElement('span',{'class':'yt-player-currenttime'}).setText(this.currentTime);
         this.plElemTimeVideoLenght    = this._createElement('span',{'class':'yt-player-videolength'}).setText(this.videoLenght);
@@ -717,6 +739,7 @@ class YTplayer {
 
         globalThis.ytPlayer.threadPlayerControler();
         globalThis.ytPlayer.flagYTReady = true;
+        globalThis.ytPlayer.youtube.setVolume(75);
         
     }
 
