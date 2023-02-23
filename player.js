@@ -239,6 +239,7 @@ class YTplayer {
         let plElemCaption = null; //elemento html relacionado às legendas
         let plElemSpeed = null; //elemento html relacionado a velocidade do video
         let plElemSpeedMenu = null; // recebe o menu de contexto do controle de velocidade do player
+        let plElemInfo = null; //botão que mostra as informações do vídeo
         let plElemFullscreenOff = null; // elemento html do botão para sair do fullscreen
         let plElemFullscreenOn = null; // elemento html do botão para entrar em modo fullscreen
         let plElemControler = null; // elemento com os controladore do vídeo
@@ -246,14 +247,17 @@ class YTplayer {
         let plLogoImg = null; // elemento imagem que recebe o logo personalizado
         let plElementProgressBar = null; //div da barra de progresso
         let plElemLightModal = null; // quando aperta na luz para apagar o que está ao redor, esse elemento fica do tamanho da tela e escurece ao redor do vídeo.
+        let plElemBackstage = null; // informações do vídeo
         let plBtnLight = null;// botão de desligar a luz
         let plBtnLightOn = null;//botão de ligar a luz
         let flagYTReady = false;//variável que controla se o player do youtube está pronto
         let plModalCLicable = null;//elemento clicável do modal. Recebe o thumbnail como background
+        let apiKey = null;
 
         this.url = init.url;
         this.title = init.title;
         this.logo = init.logo;
+        this.apiKey = init.apikey;
         this.icons = this._loadIcons();
         init.previusInfo ? this.previusInfo = init.previusInfo : null; 
         init.nextInfo ? this.nextInfo = init.nextInfo : null; 
@@ -277,6 +281,8 @@ class YTplayer {
         this._isVolumeControlVisible = false;
 
         this._playerRender();
+
+        this.getBackstageInfo();//carrega a descrição do vídeo (pessoas que participaram do projeto)
 
         //BUGFIX - quando o usuário remove a tela do fullscreen usando ESC, os botoes ficavam trocados.
         document.addEventListener('fullscreenchange', function(){
@@ -430,6 +436,19 @@ class YTplayer {
     }
 
     /**
+     * @description mostra as informações do vídeo
+     */
+    infoToggle(){
+        if(globalThis.ytPlayer.plElemInfo.element.style.color != 'yellow'){
+            globalThis.ytPlayer.plElemInfo.element.style.color = 'yellow';
+            globalThis.ytPlayer.plElemBackstage.fadeIn();
+        }else{
+            globalThis.ytPlayer.plElemInfo.element.style.color = 'var(--controler-color)';
+            globalThis.ytPlayer.plElemBackstage.fadeOut();
+        }
+    }
+
+    /**
      * Thread que controla alguns estados do player.
      * - atualiza o tempo decorrido do vídeo a cada meio segundo (currentTime)
      * - captura o tamanho do vídeo e adiciona ao player
@@ -472,6 +491,66 @@ class YTplayer {
             }
         }, 100);//a cada meio segundo, atualiza as informações do player
        
+    }
+
+    /**
+     * Utiliza a API do YouTube para retornar a lista de pessoas que participaram do projeto
+     */
+    getBackstageInfo(){
+        const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${this.videoid}&key=${this.apiKey}`;
+
+        fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            const videoDescription = data.items[0].snippet.description;
+            const plainTextDescription = videoDescription.replace(/<[^>]*>/g, '');
+            const pessoas = [];
+            const linhas = plainTextDescription.split('\n');
+
+            let pessoa = {};
+            for (let i = 0; i < linhas.length; i++) {
+            const linha = linhas[i];
+            if (linha.startsWith('@Nome:')) {
+                if (Object.keys(pessoa).length > 0) {
+                pessoas.push(pessoa);
+                pessoa = {};
+                }
+                pessoa.nome = linha.slice(6).trim();
+            } else if (linha.startsWith('@Descrição:')) {
+                pessoa.descricao = linha.slice(12).trim();
+            } else if (linha.startsWith('@Foto:')) {
+                pessoa.foto = linha.slice(6).trim();
+            }
+            }
+            if (Object.keys(pessoa).length > 0) {
+                pessoas.push(pessoa);
+            }
+            globalThis.ytPlayer.backstageInfo  = pessoas;
+
+            let info = '<div class="team-info"><h2>Produção do vídeo:</h2></div>';
+            for (let i = 0; i < pessoas.length; i++) {
+                info+= `<div class='team-actor'>
+                            <img class='foto' src='${pessoas[i].foto}' />
+                            <section class='info'>
+                                <span class='nome'>${pessoas[i].nome}</span>
+                                <span class='descricao'>${pessoas[i].descricao}</span>
+                            </section>
+                        </div>`;
+            }
+            globalThis.ytPlayer.plElemBackstage.element.innerHTML = info;
+
+            if(pessoas.length > 0) {
+                globalThis.ytPlayer.plElemInfo.show();
+            }
+            
+
+        })
+        .catch(error => {
+            console.error('Erro ao buscar informações do vídeo:', error);
+        });
+
+
+
     }
 
     /**
@@ -600,6 +679,9 @@ class YTplayer {
         this.plElemTitle = this._createElement('div',{'class': 'yt-player-title'}).setHtml(this.title);
         plModal.appendChild(this.plElemTitle);
 
+        this.plElemBackstage = this._createElement('div',{'class': 'yt-player-backstage'});
+        plModal.appendChild(this.plElemBackstage);
+
         this.plModalCLicable = this._createElement('div',{'class': 'yt-player-modal-clicable yt-player-effect'}).on('click',this.modalClick);
 
         this.plModalCLicable.element.style.background = 'url(https://img.youtube.com/vi/'+this.videoid+'/maxresdefault.jpg) center center no-repeat';
@@ -695,9 +777,11 @@ class YTplayer {
         this.plElemCaption             = this._createElement('a', {'href': '#', 'class': 'yt-player-caption yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.caption).on('click',this.caption);
         this.plElemSpeedMenu           = this._createElement('ul',{'class':'yt-player-speed-menu'}).setHtml(htmlSpeed);
         this.plElemSpeed               = this._createElement('a', {'href': '#', 'class': 'yt-player-speed yt-player-btn '}).on('click',this.speedToggle).appendChild(this.plElemSpeedMenu);
+        this.plElemInfo                = this._createElement('a', {'href': '#', 'class': 'yt-player-info yt-player-btn yt-player-element-hidden'}).on('click',this.infoToggle);
         this.plElemFullscreenOff       = this._createElement('a', {'href': '#', 'class': 'yt-player-fullscreen-exit yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.fullscreenOff).on('click',this.fullscreenOff);
         this.plElemFullscreenOn        = this._createElement('a', {'href': '#', 'class': 'yt-player-fullscreen yt-player-btn'}).setHtml(this.icons.fullscreen).on('click',this.fullscreenOn);
         plElemControlersRight.appendChild(this.plElemCaption)
+                        .appendChild(this.plElemInfo)
                         .appendChild(this.plElemSpeed)
                         .appendChild(this.plElemFullscreenOff)
                         .appendChild(this.plElemFullscreenOn);

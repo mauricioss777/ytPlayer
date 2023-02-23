@@ -39,6 +39,8 @@
     */
     --logo-height: 50px;
     --logo-opacity: 0.7;
+
+    --info-color: #CCC;
   /*
   * NÃO MODIFICAR DAQUI PARA BAIXO
   */
@@ -413,7 +415,6 @@
     content: "\F580";
     position: relative;
     bottom: 0px;
-    
 }
 #yt-player ul.yt-player-speed-menu {
     position: absolute;
@@ -439,3 +440,102 @@
     text-decoration: none;
     font-size: 12px;
 }
+
+
+#yt-player .yt-player-backstage {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1900;
+    background-image: linear-gradient(to right, #000, var(--controler-background));
+    width: 350px;
+    height: 100%;
+    overflow-y: auto;
+    opacity: 0;
+}
+
+#yt-player .yt-player-backstage .team-actor{
+    width: 290px;
+    height: 80px;
+    margin: 10px;
+    color: var(--title-color);
+    size: var(--title-font-size);
+    font-family: var(--title-font-family);
+    border-radius: 10px;
+    padding: 10px;
+    background-color: var(--controler-background);
+    
+}
+#yt-player .yt-player-backstage .team-actor img{
+    height: 80px;
+    border-radius: 3px;
+    float: left;
+}
+#yt-player .yt-player-backstage .info{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+    padding-left: 5px;
+    line-height: 150%;
+}
+
+#yt-player .yt-player-backstage .team-actor .nome{
+    font-weight: var(--title-font-weight);
+    text-overflow: ellipsis;
+}
+#yt-player .yt-player-backstage .team-actor .descricao{
+    color: var(--info-color);
+    font-size: 12px;
+    text-overflow: ellipsis;
+
+}
+
+#yt-player .yt-player-info{
+    position: relative;
+    margin-right: 10px;
+    top: 2px;
+}
+#yt-player .yt-player-info:before {
+    font-family:'Bootstrap-icons';
+    content: "\F431";
+    position: relative;
+    bottom: 0px;
+}
+
+#yt-player .team-info:before{
+    font-family:'Bootstrap-icons';
+    content: '\F431';
+    float: left;
+    padding-right: 10px;
+}
+#yt-player .team-info {
+    width: 290px;
+    margin: 10px;
+    color: var(--title-color);
+    size: var(--title-font-size);
+    font-family: var(--title-font-family);
+    border-bottom: solid 2px #999;
+    padding: 10px;
+}
+
+
+#yt-player .yt-player-backstage {
+    scrollbar-width: auto;
+    scrollbar-color: #646464 transparent;
+  }
+
+  /* Chrome, Edge, and Safari */
+  #yt-player .yt-player-backstage::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  #yt-player .yt-player-backstage::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  #yt-player .yt-player-backstage::-webkit-scrollbar-thumb {
+    background-color: #646464;
+    border-radius: 10px;
+    border: 3px solid transparent;
+  }
