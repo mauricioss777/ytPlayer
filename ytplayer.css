@@ -401,3 +401,41 @@
     left: 10px;
     z-index: 1350;
 }
+
+
+#yt-player .yt-player-speed{
+    position: relative;
+    margin-right: 10px;
+    top: 2px;
+}
+#yt-player .yt-player-speed:before {
+    font-family:'Bootstrap-icons';
+    content: "\F580";
+    position: relative;
+    bottom: 0px;
+    
+}
+#yt-player ul.yt-player-speed-menu {
+    position: absolute;
+    bottom: 40px;
+    margin-left: -10px;
+    z-index: 1000;
+    background-color: rgba(0,0,0,0.5);
+    opacity: 0;
+}
+
+#yt-player li.yt-player-speed-menuitem{
+    text-align: center;
+    width: 50px;
+    height: 30px;
+}
+
+#yt-player li.yt-player-speed-menuitem:hover{
+    background-color: rgba(100,100,100,0.3);
+}
+
+#yt-player li.yt-player-speed-menuitem a{
+    color: var(--controler-color);
+    text-decoration: none;
+    font-size: 12px;
+}

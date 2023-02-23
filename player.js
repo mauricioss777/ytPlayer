@@ -237,6 +237,8 @@ class YTplayer {
         let plElemTimeVideoLenght =  ''; // elemento html texto que mostra o tamanho do vídeo
         let plElemTitle = null; // elemento thml que mostra o título do vídeo
         let plElemCaption = null; //elemento html relacionado às legendas
+        let plElemSpeed = null; //elemento html relacionado a velocidade do video
+        let plElemSpeedMenu = null; // recebe o menu de contexto do controle de velocidade do player
         let plElemFullscreenOff = null; // elemento html do botão para sair do fullscreen
         let plElemFullscreenOn = null; // elemento html do botão para entrar em modo fullscreen
         let plElemControler = null; // elemento com os controladore do vídeo
@@ -391,7 +393,7 @@ class YTplayer {
      }
 
      /**
-        @description esta função remove o vídeo do fullscreen
+      * @description esta função remove o vídeo do fullscreen
       * 
       */
     fullscreenOff() {
@@ -406,6 +408,25 @@ class YTplayer {
         aux.classList.remove('yt-player-fullscreen');
         globalThis.ytPlayer.plElemFullscreenOn.show();
         globalThis.ytPlayer.plElemFullscreenOff.hide();
+    }
+
+    /**
+     * @description esta função altera a velocidade do vídeo
+     * @param value nova velocidade do vídeo
+     */
+    speed(value){
+        globalThis.ytPlayer.youtube.setPlaybackRate(value);
+    }
+
+    /**
+     * @description mostra o menu de velocidade do vídeo
+     */
+    speedToggle(){
+        if(globalThis.ytPlayer.plElemSpeedMenu.element.style.opacity == '0' || globalThis.ytPlayer.plElemSpeedMenu.element.style.opacity == ''){
+            globalThis.ytPlayer.plElemSpeedMenu.fadeIn();
+        }else{
+            globalThis.ytPlayer.plElemSpeedMenu.fadeOut();
+        }
     }
 
     /**
@@ -662,10 +683,22 @@ class YTplayer {
         let plElemControlersCenter   = this._createElement('span',{'class':'yt-player-controlers-center'});
         let plElemControlersRight    = this._createElement('span',{'class':'yt-player-controlers-right'});
         
+        let htmlSpeed = "<li class='yt-player-speed-menuitem'><a href='javascript:globalThis.ytPlayer.speed(0.25);' alt='0.25'>0.25</a>";
+        htmlSpeed +=    "<li class='yt-player-speed-menuitem'><a href='javascript:globalThis.ytPlayer.speed(0.5);' alt='0.5'>0.5</a>";
+        htmlSpeed +=    "<li class='yt-player-speed-menuitem'><a href='javascript:globalThis.ytPlayer.speed(0.75);' alt='0.75'>0.75</a>";
+        htmlSpeed +=    "<li class='yt-player-speed-menuitem'><a href='javascript:globalThis.ytPlayer.speed(1.0);' alt='1.0'>1.0</a>";
+        htmlSpeed +=    "<li class='yt-player-speed-menuitem'><a href='javascript:globalThis.ytPlayer.speed(1.25);' alt='1.25'>1.25</a>";
+        htmlSpeed +=    "<li class='yt-player-speed-menuitem'><a href='javascript:globalThis.ytPlayer.speed(1.5);' alt='1.5'>1.5</a>";
+        htmlSpeed +=    "<li class='yt-player-speed-menuitem'><a href='javascript:globalThis.ytPlayer.speed(1.75);' alt='1.75'>1.75</a>";
+        htmlSpeed +=    "<li class='yt-player-speed-menuitem'><a href='javascript:globalThis.ytPlayer.speed(2.0);' alt='2.0'>2.0</a>";
+
         this.plElemCaption             = this._createElement('a', {'href': '#', 'class': 'yt-player-caption yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.caption).on('click',this.caption);
+        this.plElemSpeedMenu           = this._createElement('ul',{'class':'yt-player-speed-menu'}).setHtml(htmlSpeed);
+        this.plElemSpeed               = this._createElement('a', {'href': '#', 'class': 'yt-player-speed yt-player-btn '}).on('click',this.speedToggle).appendChild(this.plElemSpeedMenu);
         this.plElemFullscreenOff       = this._createElement('a', {'href': '#', 'class': 'yt-player-fullscreen-exit yt-player-btn yt-player-element-hidden'}).setHtml(this.icons.fullscreenOff).on('click',this.fullscreenOff);
         this.plElemFullscreenOn        = this._createElement('a', {'href': '#', 'class': 'yt-player-fullscreen yt-player-btn'}).setHtml(this.icons.fullscreen).on('click',this.fullscreenOn);
         plElemControlersRight.appendChild(this.plElemCaption)
+                        .appendChild(this.plElemSpeed)
                         .appendChild(this.plElemFullscreenOff)
                         .appendChild(this.plElemFullscreenOn);
 
