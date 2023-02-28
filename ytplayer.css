@@ -404,6 +404,7 @@
     z-index: 1350;
 }
 
+<<<<<<< HEAD
 
 #yt-player .yt-player-speed{
     position: relative;
@@ -539,3 +540,21 @@
     border-radius: 10px;
     border: 3px solid transparent;
   }
+=======
+.yt-player-intro-video, .yt-player-signature-video {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 10px;
+}
+
+.yt-player-intro-video {
+    z-index: 0;
+}
+
+.yt-player-signature-video {
+    z-index: 0;
+}
+>>>>>>> 0dffcb7 (Commitadas mudanças feitas no codespace)

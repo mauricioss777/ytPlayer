@@ -14,6 +14,8 @@
  * @property { string } logo - Opcionalmente você adicionar seu logotipo no player basta inserir a url da imagem.
  * @property { Object } previusLink - Opcinalmente, você pode adicionar um link/video ao botão voltar {link: '', alt: '', thumbnail: '', title: ''}
  * @property { Object } nextLink - Opcinalmente, você pode adicionar um link para a próxima página/vídeo {link: '', alt: '', thumbnail: '', title: ''}
+ * @property { string } introLink - O link da intro para o vídeo.
+ * @property { string } signatureVideoLink - O link do vídeo de assinatura.
  * @property { Object } customIcons - Opcionalmente, você pode usar ícones alternativos.
  * @property { string } customIcons.play - O ícone de tocar.
  * @property { string } customIcons.pause - O ícone de pausar.
@@ -259,8 +261,22 @@ class YTplayer {
         this.logo = init.logo;
         this.apiKey = init.apikey;
         this.icons = this._loadIcons();
+
+        /**
+         * @type { ChainableElementRepresenter }
+         */
+        this._introVideo = this._createElement("video", { "class": "yt-player-intro-video" });
+
+        /**
+         * @type { ChainableElementRepresenter }
+         */
+        this._signatureVideo = this._createElement("video", { "class": "yt-player-signature-video" });
+
+        this._introVideo.element.src = init.introLink;
+        this._signatureVideo.element.src = init.signatureVideoLink;
+
         init.previusInfo ? this.previusInfo = init.previusInfo : null; 
-        init.nextInfo ? this.nextInfo = init.nextInfo : null; 
+        init.nextInfo ? this.nextInfo = init.nextInfo : null;
 
         // Define os ícones do usuário.
         for (let index in init.customIcons) {
@@ -316,8 +332,7 @@ class YTplayer {
     /**
      * @description esta função dá play no vídeo.
      */
-    play() { 
-
+    play() {
         if(globalThis.ytPlayer.isFinishedVideo() || !globalThis.ytPlayer.flagYTReady){// HACK #1
             return;
         }
@@ -325,6 +340,13 @@ class YTplayer {
         globalThis.ytPlayer.plElemPlay.hide();
         globalThis.ytPlayer.plElemPause.show();
         globalThis.ytPlayer.controlersFadeOut();
+
+        this._introVideo.element.addEventListener("ended", event => {
+            
+        });
+
+        this._introVideo.element.style["zIndex"] = "10";
+        this._introVideo.element.play();
         
     }
 
@@ -805,7 +827,8 @@ class YTplayer {
         this.playerElement.appendChild(this.plElemLightModal.element);
 
 
-
+        this._mountIntroVideo();
+        this._mountSignatureVideo();
     }
 
     /**
@@ -984,6 +1007,34 @@ class YTplayer {
 
         
         return defaultIcons;
+    }
+
+    /**
+     * Insere o vídeo intro.
+     */
+    _mountIntroVideo() {
+        this.playerElement.appendChild(this._introVideo.element);
+    }
+
+    /**
+     * Toca a intro do vídeo.
+     */
+    _playIntroVideo() {
+        this._introVideo.play();
+    }
+
+    /**
+     * Insere o vídeo de assinatura.
+     */
+    _mountSignatureVideo() {
+        this.playerElement.appendChild(this._signatureVideo.element);
+    }
+
+    /**
+     * Toca a assinatura do vídeo.
+     */
+    _playSignatureVideo() {
+        this._signatureVideo.play();
     }
 
     /*
