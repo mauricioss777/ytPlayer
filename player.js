@@ -266,6 +266,7 @@ class YTplayer {
          * @type { ChainableElementRepresenter }
          */
         this._introVideo = this._createElement("video", { "class": "yt-player-intro-video" });
+        this._introVideoHasEnded = false;
 
         /**
          * @type { ChainableElementRepresenter }
@@ -333,20 +334,35 @@ class YTplayer {
      * @description esta função dá play no vídeo.
      */
     play() {
+        
         if(globalThis.ytPlayer.isFinishedVideo() || !globalThis.ytPlayer.flagYTReady){// HACK #1
             return;
         }
-        globalThis.ytPlayer.youtube.playVideo(); 
-        globalThis.ytPlayer.plElemPlay.hide();
-        globalThis.ytPlayer.plElemPause.show();
-        globalThis.ytPlayer.controlersFadeOut();
 
-        this._introVideo.element.addEventListener("ended", event => {
+        if (this._introVideoHasEnded) {
+            globalThis.ytPlayer.youtube.playVideo(); 
+            globalThis.ytPlayer.plElemPlay.hide();
+            globalThis.ytPlayer.plElemPause.show();
+            globalThis.ytPlayer.controlersFadeOut();
+        }
+
+        else {
+            this._introVideo.element.style.zIndex = "9901";
             
-        });
+            if (this._introVideo.element.paused) {
+                this._introVideo.element.play();
+            }
 
-        this._introVideo.element.style["zIndex"] = "10";
-        this._introVideo.element.play();
+            else {
+                this._introVideo.element.pause();
+            }
+        }
+
+        this._introVideo.element.addEventListener("ended", () => {
+            this._introVideo.element.style.display = "none";
+            this._introVideoHasEnded = true;
+            this.play();
+        });
         
     }
 
